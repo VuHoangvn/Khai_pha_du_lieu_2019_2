@@ -1,4 +1,5 @@
 import numpy as np 
+import matplotlib.pyplot as plt 
 
 
 class NeuralNet():
@@ -24,7 +25,7 @@ class NeuralNet():
         self.params['W1'] = np.random.randn(self.layers[0], self.layers[1])
         self.params['b1'] = np.random.randn(self.layers[1])
         self.params['W2'] = np.random.randn(self.layers[1], self.layers[2])
-        self.params['b2'] = np.random.rand(self.layersp2)
+        self.params['b2'] = np.random.rand(self.layers[2])
 
     def relu(self, Z):
         '''
@@ -71,13 +72,14 @@ class NeuralNet():
         def dRelu(x):
             x[x<=0] = 0
             x[x>0] = 1
+            return x
 
         dl_wrt_yhat = -(np.divide(self.y, yhat) - np.divide((1-self.y), (1-yhat)))
         dl_wrt_sig = yhat * (1-yhat)
         dl_wrt_z2 = dl_wrt_yhat * dl_wrt_sig
 
         dl_wrt_A1 = dl_wrt_z2.dot(self.params['W2'].T)
-        dl_wrt_w2 = self.params['A1'].T.dot.(dl_wrt_z2))
+        dl_wrt_w2 = self.params['A1'].T.dot(dl_wrt_z2)
         dl_wrt_b2 = np.sum(dl_wrt_z2, axis=0)
 
         dl_wrt_z1 = dl_wrt_A1 * dRelu(self.params['Z1'])
@@ -119,6 +121,16 @@ class NeuralNet():
         '''
         acc = int(sum(y==yhat) / len(y) * 100)
         return acc
+    
+    def plot_loss(self):
+        '''
+        Plots the loss curve
+        '''
+        plt.plot(self.loss)
+        plt.xlabel("Iteration")
+        plt.ylabel("logloss")
+        plt.title("Loss curve for training")
+        plt.show()
 
 
 # import numpy as np
